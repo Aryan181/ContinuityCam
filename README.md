@@ -94,3 +94,44 @@ To run this project:
 5. Connect an iPhone or iPad running iOS 16.0 or later to use as a Continuity Camera
 
 *Note: This project requires a Mac with Apple Silicon or Intel processor and an iOS device compatible with the Continuity Camera feature.*
+
+
+## Application Flow
+
+The following flowchart illustrates the main function calls and their relationships from app launch to mouse movement:
+
+```mermaid
+flowchart TD
+    A[App Launch] --> B[ContinuityCamApp.body]
+    B --> C[ContentView.init]
+    C --> D[Camera.init]
+    C --> E[ContentView.body]
+    E --> F[CameraPreview.init]
+    E --> G[ConfigurationView.init]
+    D --> H[Camera.start]
+    H --> I[Camera.authorize]
+    I --> J[Camera.setup]
+    J --> K[Camera.setupDeviceDiscovery]
+    J --> L[Camera.setupInputs]
+    L --> M[Camera.addInput]
+    L --> N[AVCaptureVideoDataOutput.setSampleBufferDelegate]
+    H --> O[Camera.startSession]
+    O --> P[AVCaptureSession.startRunning]
+    N --> Q[Camera.captureOutput]
+    Q --> R[VNImageRequestHandler.perform]
+    R --> S[HandPoseProcessor.processHandPose]
+    S --> T{Is pinch detected?}
+    T -->|Yes| U[HandPoseProcessor.activateTrackpad]
+    T -->|No| V[HandPoseProcessor.deactivateTrackpad]
+    U --> W[HandPoseProcessor.updateCursorPosition]
+    W --> X[HandPoseProcessor.moveCursor]
+    X --> Y[CGWarpMouseCursorPosition]
+```
+
+This flowchart demonstrates how the app integrates various components to achieve hand gesture-based cursor control using the Continuity Camera feature.
+
+
+
+
+
+
