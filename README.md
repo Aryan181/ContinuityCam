@@ -131,7 +131,35 @@ flowchart TD
 This flowchart demonstrates how the app integrates various components to achieve hand gesture-based cursor control using the Continuity Camera feature.
 
 
+```markdown
+## Vision Framework Process Flow
 
+The following flowchart illustrates how the Vision framework is used in this app for hand pose detection and cursor control:
+
+```mermaid
+flowchart TD
+    A[Camera Capture] -->|CMSampleBuffer| B[Extract CVPixelBuffer]
+    B --> C[Create VNImageRequestHandler]
+    C --> D[Create VNDetectHumanHandPoseRequest]
+    D --> E[Perform VNDetectHumanHandPoseRequest]
+    E -->|VNHumanHandPoseObservation| F[HandPoseProcessor]
+    F --> G{Extract Finger Points}
+    G -->|Success| H[Calculate Pinch Distance]
+    G -->|Failure| M[Deactivate Trackpad]
+    H --> I{Pinch Detected?}
+    I -->|Yes| J[Activate/Update Trackpad]
+    I -->|No| M
+    J --> K[Calculate Cursor Position]
+    K --> L[Move System Cursor]
+    
+    style A fill:#f9d5e5,stroke:#333,stroke-width:2px
+    style E fill:#eeac99,stroke:#333,stroke-width:2px
+    style F fill:#e06377,stroke:#333,stroke-width:2px
+    style L fill:#5b9aa0,stroke:#333,stroke-width:2px
+```
+
+This process repeats for each video frame, allowing for real-time hand tracking and cursor control. The Vision framework handles the complex task of detecting and tracking hand poses, while the app's custom logic interprets these poses to simulate trackpad-like behavior.
+```
 
 
 
