@@ -131,7 +131,7 @@ flowchart TD
 This flowchart demonstrates how the app integrates various components to achieve hand gesture-based cursor control using the Continuity Camera feature.
 
 
-```markdown
+ 
 ## Vision Framework Process Flow
 
 The following flowchart illustrates how the Vision framework is used in this app for hand pose detection and cursor control:
