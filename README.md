@@ -12,6 +12,73 @@ Our primary objective is to develop a system that uses *finger tracking and univ
 
 This approach allows users to navigate their computers and execute complex commands without the need for traditional input devices, significantly reducing strain on hands and wrists.
 
+
+## Application Flow
+
+The following flowchart illustrates the main function calls and their relationships from app launch to mouse movement:
+
+```mermaid
+flowchart TD
+    A[App Launch] --> B[ContinuityCamApp.body]
+    B --> C[ContentView.init]
+    C --> D[Camera.init]
+    C --> E[ContentView.body]
+    E --> F[CameraPreview.init]
+    E --> G[ConfigurationView.init]
+    D --> H[Camera.start]
+    H --> I[Camera.authorize]
+    I --> J[Camera.setup]
+    J --> K[Camera.setupDeviceDiscovery]
+    J --> L[Camera.setupInputs]
+    L --> M[Camera.addInput]
+    L --> N[AVCaptureVideoDataOutput.setSampleBufferDelegate]
+    H --> O[Camera.startSession]
+    O --> P[AVCaptureSession.startRunning]
+    N --> Q[Camera.captureOutput]
+    Q --> R[VNImageRequestHandler.perform]
+    R --> S[HandPoseProcessor.processHandPose]
+    S --> T{Is pinch detected?}
+    T -->|Yes| U[HandPoseProcessor.activateTrackpad]
+    T -->|No| V[HandPoseProcessor.deactivateTrackpad]
+    U --> W[HandPoseProcessor.updateCursorPosition]
+    W --> X[HandPoseProcessor.moveCursor]
+    X --> Y[CGWarpMouseCursorPosition]
+```
+
+This flowchart demonstrates how the app integrates various components to achieve hand gesture-based cursor control using the Continuity Camera feature.
+
+
+ 
+## Vision Framework Process Flow
+
+The following flowchart illustrates how the Vision framework is used in this app for hand pose detection and cursor control:
+
+```mermaid
+flowchart TD
+    A[Camera Capture] -->|CMSampleBuffer| B[Extract CVPixelBuffer]
+    B --> C[Create VNImageRequestHandler]
+    C --> D[Create VNDetectHumanHandPoseRequest]
+    D --> E[Perform VNDetectHumanHandPoseRequest]
+    E -->|VNHumanHandPoseObservation| F[HandPoseProcessor]
+    F --> G{Extract Finger Points}
+    G -->|Success| H[Calculate Pinch Distance]
+    G -->|Failure| M[Deactivate Trackpad]
+    H --> I{Pinch Detected?}
+    I -->|Yes| J[Activate/Update Trackpad]
+    I -->|No| M
+    J --> K[Calculate Cursor Position]
+    K --> L[Move System Cursor]
+    
+    style A fill:#f9d5e5,stroke:#333,stroke-width:2px
+    style E fill:#eeac99,stroke:#333,stroke-width:2px
+    style F fill:#e06377,stroke:#333,stroke-width:2px
+    style L fill:#5b9aa0,stroke:#333,stroke-width:2px
+```
+
+This process repeats for each video frame, allowing for real-time hand tracking and cursor control. The Vision framework handles the complex task of detecting and tracking hand poses, while the app's custom logic interprets these poses to simulate trackpad-like behavior.
+```
+
+
 ### Target Audience
 
 While our initial focus is on individuals with *carpal tunnel syndrome*, our ultimate goal is to broaden our user base to include:
@@ -96,70 +163,7 @@ To run this project:
 *Note: This project requires a Mac with Apple Silicon or Intel processor and an iOS device compatible with the Continuity Camera feature.*
 
 
-## Application Flow
 
-The following flowchart illustrates the main function calls and their relationships from app launch to mouse movement:
-
-```mermaid
-flowchart TD
-    A[App Launch] --> B[ContinuityCamApp.body]
-    B --> C[ContentView.init]
-    C --> D[Camera.init]
-    C --> E[ContentView.body]
-    E --> F[CameraPreview.init]
-    E --> G[ConfigurationView.init]
-    D --> H[Camera.start]
-    H --> I[Camera.authorize]
-    I --> J[Camera.setup]
-    J --> K[Camera.setupDeviceDiscovery]
-    J --> L[Camera.setupInputs]
-    L --> M[Camera.addInput]
-    L --> N[AVCaptureVideoDataOutput.setSampleBufferDelegate]
-    H --> O[Camera.startSession]
-    O --> P[AVCaptureSession.startRunning]
-    N --> Q[Camera.captureOutput]
-    Q --> R[VNImageRequestHandler.perform]
-    R --> S[HandPoseProcessor.processHandPose]
-    S --> T{Is pinch detected?}
-    T -->|Yes| U[HandPoseProcessor.activateTrackpad]
-    T -->|No| V[HandPoseProcessor.deactivateTrackpad]
-    U --> W[HandPoseProcessor.updateCursorPosition]
-    W --> X[HandPoseProcessor.moveCursor]
-    X --> Y[CGWarpMouseCursorPosition]
-```
-
-This flowchart demonstrates how the app integrates various components to achieve hand gesture-based cursor control using the Continuity Camera feature.
-
-
- 
-## Vision Framework Process Flow
-
-The following flowchart illustrates how the Vision framework is used in this app for hand pose detection and cursor control:
-
-```mermaid
-flowchart TD
-    A[Camera Capture] -->|CMSampleBuffer| B[Extract CVPixelBuffer]
-    B --> C[Create VNImageRequestHandler]
-    C --> D[Create VNDetectHumanHandPoseRequest]
-    D --> E[Perform VNDetectHumanHandPoseRequest]
-    E -->|VNHumanHandPoseObservation| F[HandPoseProcessor]
-    F --> G{Extract Finger Points}
-    G -->|Success| H[Calculate Pinch Distance]
-    G -->|Failure| M[Deactivate Trackpad]
-    H --> I{Pinch Detected?}
-    I -->|Yes| J[Activate/Update Trackpad]
-    I -->|No| M
-    J --> K[Calculate Cursor Position]
-    K --> L[Move System Cursor]
-    
-    style A fill:#f9d5e5,stroke:#333,stroke-width:2px
-    style E fill:#eeac99,stroke:#333,stroke-width:2px
-    style F fill:#e06377,stroke:#333,stroke-width:2px
-    style L fill:#5b9aa0,stroke:#333,stroke-width:2px
-```
-
-This process repeats for each video frame, allowing for real-time hand tracking and cursor control. The Vision framework handles the complex task of detecting and tracking hand poses, while the app's custom logic interprets these poses to simulate trackpad-like behavior.
-```
 
 
 
