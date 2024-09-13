@@ -1,21 +1,75 @@
 # Continuity Camera Mouse Tracker
 
-## Project Motivation
+## Project Overview
 
-The **Continuity Camera Mouse Tracker** project aims to revolutionize computer interaction for individuals with physical limitations, particularly those suffering from *carpal tunnel syndrome*. By leveraging advanced camera technology and machine learning, we seek to **replace traditional physical input devices** with intuitive gesture controls.
+The Continuity Camera Mouse Tracker is an innovative application designed to revolutionize computer interaction for individuals with physical limitations, particularly those affected by carpal tunnel syndrome. By leveraging advanced camera technology and machine learning, this project aims to replace traditional physical input devices with intuitive gesture controls.
 
-### Objective
+### Key Objectives
 
-Our primary objective is to develop a system that uses *finger tracking and universal gesture control* to:
-1. Replace the physical mouse
-2. Perform keyboard shortcuts
+1. Develop a system using finger tracking and universal gesture control to:
+   - Replace the physical mouse
+   - Perform keyboard shortcuts
+2. Reduce strain on hands and wrists by eliminating the need for traditional input devices
+3. Provide an accessible solution for users with limited hand mobility
 
-This approach allows users to navigate their computers and execute complex commands without the need for traditional input devices, significantly reducing strain on hands and wrists.
+### Target Audience
 
+- Individuals with carpal tunnel syndrome
+- Designers and creative professionals
+- Mechanical engineers working with CAD software
+- Any professional requiring precise cursor control who struggles with traditional input devices
+
+## Technology Stack
+
+- **Swift**: Primary programming language
+- **SwiftUI**: User interface framework
+- **AVFoundation**: For camera and video processing
+- **Vision**: For hand pose detection and tracking
+- **Continuity Camera**: Utilizes iPhone as a high-quality camera for MacBooks
+
+## Key Features
+
+1. **Low-Latency Camera Feed Streaming**: 
+   - Utilizes an iPhone's camera feed
+   - Streams data to a MacBook via Bluetooth with minimal latency
+
+2. **On-Device Processing**:
+   - Leverages the computational power of Apple Silicon chips in MacBooks
+   - Runs sophisticated machine learning models for real-time hand tracking
+
+3. **Gesture-Based Control**:
+   - Translates hand movements into cursor control
+   - Supports custom gestures for various commands and shortcuts
+
+## Project Architecture
+
+### Core Components
+
+1. **Camera Module** (`Camera.swift`)
+   - Manages camera operations and video processing
+   - Utilizes AVFoundation for seamless camera access and control
+
+2. **Device Observers** (`DeviceObservers.swift`)
+   - Monitors changes in camera effects and system preferences
+   - Implements Key-Value Observing (KVO) for real-time updates
+
+3. **Hand Pose Processor** (`HandPoseProcessor.swift`)
+   - Utilizes Vision framework for hand pose detection
+   - Translates hand movements into cursor control and gesture commands
+
+### User Interface Components
+
+- **ContentView** (`ContentView.swift`): Main SwiftUI view orchestrating the app's UI
+- **CameraPreview** (`CameraPreview.swift`): Displays real-time camera feed
+- **ConfigurationView** (`ConfigurationView.swift`): Allows users to configure camera and gesture settings
+- **CursorFeedbackView** (`CursorFeedbackView.swift`): Provides visual feedback for cursor position
+
+### Utility Components
+
+- **MaterialView** (`MaterialView.swift`): Enhances UI with blurred, translucent effects
+- **ContinuityCamApp** (`ContinuityCamApp.swift`): Defines the main application structure
 
 ## Application Flow
-
-The following flowchart illustrates the main function calls and their relationships from app launch to mouse movement:
 
 ```mermaid
 flowchart TD
@@ -45,13 +99,7 @@ flowchart TD
     X --> Y[CGWarpMouseCursorPosition]
 ```
 
-This flowchart demonstrates how the app integrates various components to achieve hand gesture-based cursor control using the Continuity Camera feature.
-
-
- 
 ## Vision Framework Process Flow
-
-The following flowchart illustrates how the Vision framework is used in this app for hand pose detection and cursor control:
 
 ```mermaid
 flowchart TD
@@ -75,55 +123,6 @@ flowchart TD
     style L fill:#5b9aa0,stroke:#333,stroke-width:2px
 ```
 
-This process repeats for each video frame, allowing for real-time hand tracking and cursor control. The Vision framework handles the complex task of detecting and tracking hand poses, while the app's custom logic interprets these poses to simulate trackpad-like behavior.
-```
-
-
-### Target Audience
-
-While our initial focus is on individuals with *carpal tunnel syndrome*, our ultimate goal is to broaden our user base to include:
-- Designers
-- Mechanical engineers working with CAD software
-- Any professional who requires precise cursor control but struggles with traditional input devices
-
-## Key Technological Exploits
-
-1. **Low-Latency Camera Feed Streaming**: 
-   - Utilizes an iPhone's camera feed
-   - Streams data to a MacBook via Bluetooth with minimal latency
-
-2. **Powerful On-Device Processing**:
-   - Leverages the computational power of M1 chips in MacBooks
-   - Runs sophisticated machine learning models for real-time hand tracking
-
-3. **Future Enhancements**:
-   - Potential to stream depth and infrared data from iPhone's TrueDepth camera
-   - Aims to emulate and potentially surpass Ultraleap's hand tracking capabilities
-
-## Project Architecture and Components
-
-### 1. Camera Module (Camera.swift)
-- Manages camera operations and video processing
-- Utilizes AVFoundationKit for seamless camera access and control
-
-### 2. Device Observers (DeviceObservers.swift)
-- Monitors changes in camera effects and system preferences
-- Implements Key-Value Observing (KVO) for real-time updates
-
-### 3. Hand Pose Processor (HandPoseProcessor.swift)
-- Utilizes Vision framework for hand pose detection
-- Translates hand movements into cursor control and gesture commands
-
-### 4. User Interface Components
-- **CursorFeedbackView (CursorFeedbackView.swift)**: Provides visual feedback for cursor position
-- **ContentView (ContentView.swift)**: Main SwiftUI view orchestrating the app's UI
-- **CameraPreview (CameraPreview.swift)**: Displays real-time camera feed
-- **ConfigurationView (ConfigurationView.swift)**: Allows users to configure camera and gesture settings
-
-### 5. Utility Components
-- **MaterialView (MaterialView.swift)**: Enhances UI with blurred, translucent effects
-- **ContinuityCamApp (ContinuityCamApp.swift)**: Defines the main application structure
-
 ## Key Challenges and Solutions
 
 1. **Real-time Hand Pose Detection**
@@ -136,7 +135,7 @@ While our initial focus is on individuals with *carpal tunnel syndrome*, our ult
 
 3. **Low-Latency Video Streaming**
    - *Challenge*: Minimizing delay between iPhone camera and MacBook processing
-   - *Solution*: Optimized Bluetooth data transfer and leveraged M1 chip's processing power
+   - *Solution*: Optimized Bluetooth data transfer and leveraged Apple Silicon chip's processing power
 
 4. **Accessibility-Focused UI**
    - *Challenge*: Creating an interface usable by individuals with limited hand mobility
@@ -144,11 +143,11 @@ While our initial focus is on individuals with *carpal tunnel syndrome*, our ult
 
 ## Future Improvements
 
-1. **Enhanced Gesture Recognition**: Implement more complex gestures for advanced controls
-2. **Cross-Platform Support**: Extend functionality to iOS and iPadOS
-3. **Depth and Infrared Integration**: Utilize TrueDepth camera data for more precise tracking
-4. **Industry-Specific Modules**: Develop specialized gesture sets for CAD software, video editing, etc.
-5. **Machine Learning Optimization**: Continuously improve hand tracking accuracy and efficiency
+1. Enhanced Gesture Recognition: Implement more complex gestures for advanced controls
+2. Cross-Platform Support: Extend functionality to iOS and iPadOS
+3. Depth and Infrared Integration: Utilize TrueDepth camera data for more precise tracking
+4. Industry-Specific Modules: Develop specialized gesture sets for CAD software, video editing, etc.
+5. Machine Learning Optimization: Continuously improve hand tracking accuracy and efficiency
 
 ## Getting Started
 
@@ -162,8 +161,19 @@ To run this project:
 
 *Note: This project requires a Mac with Apple Silicon or Intel processor and an iOS device compatible with the Continuity Camera feature.*
 
+## Contributing
 
+We welcome contributions to the Continuity Camera Mouse Tracker project. Please read our CONTRIBUTING.md file for guidelines on how to submit pull requests, report issues, and suggest improvements.
 
+## License
 
+This project is licensed under the MIT License. See the LICENSE file for details.
 
+## Acknowledgments
 
+- Apple Inc. for providing the Vision framework and Continuity Camera feature
+- The open-source community for inspiration and shared knowledge
+
+## Contact
+
+For questions, suggestions, or support, please open an issue in the GitHub repository or contact the project maintainers directly.
